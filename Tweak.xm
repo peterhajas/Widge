@@ -2,28 +2,79 @@
 
 %hook SBIconController
 
--(id)scrollView
-{
-	//Modify the parameters of the scrollView to add another page
-	
-	SBIconScrollView* scroll = %orig;
-
-	//Expand contentSize (by 320pt, change this for iPad/Wildcat)
-	scroll.contentSize = CGSizeMake(scroll.contentSize.width + 320, scroll.contentSize.height);
-
-	//Move every page over one (by 320pt, this will need to be changed for iPad/Wildcat
-	//We don't want to move the search view!
-	unsigned int i;
-	for(i = 0; i < [[scroll subviews] count] - 1; i++)
-	{
-		UIView *temp = [[scroll subviews] objectAtIndex:i];
-	
-		temp.frame = CGRectMake(temp.frame.origin.x+320, 0, 320, 351);
+// Reimplementation of -[SBIconController updateRootIconListFrames] from 4.1
+// Mightbe better to do a supercall and adjust the frames afterwards. Thoughts?
+- (void)updateRootIconListFrames {
+	%log;
+	UIScrollView *_scrollView = MSHookIvar<UIScrollView *>(self, "_scrollView");
+	UIView *_searchView = MSHookIvar<UIView *>(self, "_searchView");
+	NSMutableArray *_rootIconLists = MSHookIvar<NSMutableArray *>(self, "_rootIconLists");
+	float height = _scrollView.frame.size.height;
+	float width = _scrollView.frame.size.width;
+	int numpages = 2; // account for searchview
+	float off = width * numpages;
+	int i = 0;
+	for(UIView *v in _rootIconLists) {
+		if([v superview] != _scrollView) {
+			[_scrollView addSubview:v];
+		}
+		[v setFrame:CGRectMake(off+(width*i),0,width,height)];
+		i++;
+		numpages++;
 	}
-
-	return scroll;
+	CGRect scrollViewFrame = _scrollView.frame;
+	[_scrollView setContentSize:CGSizeMake(scrollViewFrame.size.width * numpages, scrollViewFrame.size.height)];
+	NSLog(@"--content size is %@", NSStringFromCGSize(_scrollView.contentSize));
+	[_scrollView bringSubviewToFront:_searchView];
+	return;
 }
 
+// reimplementation, 4.1
+// todo: make better, i missed some of the cases in the original
+// fixes the "icons are unloaded because they are on an unknown page" issue
+- (int)lowestVisibleIconListIndexAndColumn:(int *)column totalLists:(unsigned)lists columnsPerList:(int)columnsPerList {
+	UIScrollView *_scrollView = MSHookIvar<UIScrollView *>(self, "_scrollView");
+	CGPoint contentOffset = _scrollView.contentOffset;
+	CGRect frame = _scrollView.frame;
+	if(contentOffset.x < frame.size.width*2) {
+		if(column) {
+			*column = (lists == 0 ? 0 : columnsPerList - 1);
+		}
+		return -1;
+	} else {
+		unsigned idx = ((contentOffset.x - frame.size.width*2) / frame.size.width);
+		if(idx <= lists) {
+			if(column) {
+				SBIconListView *currentRootIconList = [self rootIconListAtIndex:idx];
+				float x, y;
+				x = fmodf(contentOffset.x, frame.size.width);
+				y = contentOffset.y;
+				int col = [currentRootIconList columnAtPoint:CGPointMake(x, y)];
+				if(col >= 0) {
+					if(col >= columnsPerList) col = columnsPerList - 1;
+				} else col = 0;
+				*column = col;
+			}
+		} else {
+			idx = lists - 1;
+			if(column) {
+				*column = columnsPerList - 1;
+			}
+		}
+		return idx;
+	}
+}
+
+%end
+
+%hook SBIconListPageControl
+- (void)setNumberOfPagesWithIconListCount:(int)count {
+	[self setNumberOfPages:count + 2];
+}
+
+- (void)setCurrentPageWithIconListNumber:(int)number {
+	[self setCurrentPage:number + 2];
+}
 %end
 
 /* How to Hook with Logos
