@@ -1,0 +1,9 @@
+Package: com.peterhajas-dustinhowett.widge
+Name: Widge
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: An awesome MobileSubstrate tweak!
+Maintainer: Peter Hajas and Dustin Howett
+Author: Peter Hajas and Dustin Howett
+Section: Tweaks
