@@ -29,6 +29,10 @@
 	return;
 }
 
+- (BOOL)isShowingSearch {
+	return MSHookIvar<int>(self, "_currentIconListIndex") == -2;
+}
+
 // reimplementation, 4.1
 // todo: make better, i missed some of the cases in the original
 // fixes the "icons are unloaded because they are on an unknown page" issue
@@ -40,7 +44,8 @@
 		if(column) {
 			*column = (lists == 0 ? 0 : columnsPerList - 1);
 		}
-		return -1;
+		unsigned idx = ((contentOffset.x) / frame.size.width);
+		return -2+idx;
 	} else {
 		unsigned idx = ((contentOffset.x - frame.size.width*2) / frame.size.width);
 		if(idx <= lists) {
