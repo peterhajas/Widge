@@ -72,7 +72,9 @@
 
 -(void)scrollToIconListAtIndex:(int)index animate:(BOOL)animate
 {
-
+	//Scroll to the location asked for plus 1 at the original animate setting
+	//This retains feature parity with the traditional scrollToIconListAtIndex: animate: behavior
+	%orig(index + 1, animate);
 }
 
 %end
