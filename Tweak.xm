@@ -70,6 +70,11 @@
 	}
 }
 
+-(void)scrollToIconListAtIndex:(int)index animate:(BOOL)animate
+{
+
+}
+
 %end
 
 %hook SBIconListPageControl
@@ -116,3 +121,7 @@ the generation of a class list and an automatic constructor.
 // Always make sure you clean up after yourself; Not doing so could have grave conseqeuences!
 %end
 */
+
+
+// vim:ft=objc
+
