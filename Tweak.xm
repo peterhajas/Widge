@@ -79,6 +79,18 @@
 
 %end
 
+%hook SBIconScrollView
+
+- (CGSize)contentSize
+{
+	CGSize size = %orig;
+	UIScreen *screen = [UIScreen mainScreen];
+	CGSize newSize = CGSizeMake(size.width + screen.bounds.size.width, size.height);
+	return newSize;	
+}
+
+%end
+
 %hook SBIconListPageControl
 - (void)setNumberOfPagesWithIconListCount:(int)count {
 	[self setNumberOfPages:count + 2];
