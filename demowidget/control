@@ -1,0 +1,9 @@
+Package: com.peterhajas-dustinhowett.demowidget
+Name: DemoWidget
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: A sample Widge widget
+Maintainer: Peter Hajas and Dustin Howett
+Author: Peter Hajas and Dustin Howett
+Section: Tweaks
