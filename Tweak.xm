@@ -16,13 +16,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #import <SpringBoard/SpringBoard.h>
+#import <WidgeKit/WGWidgetViewController.h>
 #import "WGRootController.h"
+
+UIView* widgetView;
 
 %hook SpringBoard
 
 -(void)applicationDidFinishLaunching:(id)application
 {
-	
+    %orig;
+    
+    //Create a root widget controller. Should we move this to a SpringBoard ivar?
+    WGRootController* widgeRootController = [[WGRootController alloc] init];
+    [widgeRootController loadWidgetBundles];
+
+    //Grab the demo widget
+    WGWidgetViewController* demoWidget = [widgeRootController initDemoWidget];
+    
+    NSLog(@"............................%@", NSStringFromClass([demoWidget class]));
+    
+    //Set the proportions of the widgetWindow    
+    widgetView = [[UIView alloc] initWithFrame:CGRectMake(320,20,320,460)];
+	widgetView.userInteractionEnabled = YES;
+	widgetView.hidden = NO;
+	widgetView.clipsToBounds = NO;
+	widgetView.backgroundColor = [UIColor clearColor];
+    
+    NSLog(@"............................Adding widget");
+    
+    //Add the demowidget to the widgetview
+    [widgetView addSubview:demoWidget.view];
+    
+    //Add the widgetview to the scrollview in springboard
+    SBIconController *sbic = (SBIconController *)[%c(SBIconController) sharedInstance];
+    UIScrollView *_scrollView = [sbic scrollView];
+    [_scrollView addSubview:widgetView];
+    
+    NSLog(@"............................Widget added");
 }
 
 %end
