@@ -1,0 +1,9 @@
+Package: com.peterhajas-dustinhowett.widgekit
+Name: WidgeKit
+Depends: 
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: The framework for creating Widge widgets
+Maintainer: Peter Hajas and Dustin Howett
+Author: Peter Hajas and Dustin Howett
+Section: Tweaks
