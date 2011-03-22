@@ -16,6 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #import <UIKit/UIKit.h>
+#import <WidgeKit/WGWidgetViewController.h>
 //#import "WGWidgetController.h"
 
 @interface WGRootController : NSObject
@@ -26,6 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 -(void)loadWidgetBundles;
-
+-(WGWidgetViewController *)initDemoWidget;
 
 @end

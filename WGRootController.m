@@ -17,12 +17,43 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import "WGRootController.h"
 
+#define WIDGET_PATH @"/Library/Application Support/Widge/Widgets/"
+
 @implementation WGRootController
 
 -(void)loadWidgetBundles
 {
-	//Load all paths for the bundle
-	NSArray *paths = [[[NSBundle mainBundle] pathsForResourcesOfType:@"bundle" 
-                                inDirectory:@"/Library/Application Support/Widge/Widgets/"] autorelease];
-	//
+	//Load all paths for the widget bundles
+	NSArray *bundleNames = [[NSFileManager defaultManager] 
+	                        contentsOfDirectoryAtPath:WIDGET_PATH
+                            error:nil];
+    
+    NSMutableArray *paths = [[[NSMutableArray alloc] init] autorelease];
+    
+    widgetViewControllers = [[NSMutableArray alloc] init];
+    
+    for(NSString *bundleName in bundleNames)
+    {
+        NSString *bundlePath = [WIDGET_PATH stringByAppendingPathComponent:bundleName];
+        [paths addObject:bundlePath];
+        NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
+        [widgetViewControllers addObject:[bundle principalClass]];
+    }
 }
+
+//This is for demo purposes only:
+
+-(WGWidgetViewController *)initDemoWidget
+{
+    if([widgetViewControllers count] != 0)
+    {
+        WGWidgetViewController* widget = [[[widgetViewControllers objectAtIndex:0] alloc] init];
+        [widget.view setFrame:CGRectMake(0,0,160,110)];
+        return widget;
+    }
+    return nil;
+}
+
+
+
+@end
