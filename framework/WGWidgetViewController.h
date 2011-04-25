@@ -19,8 +19,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 @interface WGWidgetViewController : UIViewController
 
--(NSString *)widgetName;
+-(NSString*)widgetName;
 -(int)iconRowsWide;
 -(int)iconColumnsWide;
+
+-(void)widgetWillAppear;
+-(void)widgetDidAppear;
+-(void)widgetWillDissapear;
+-(void)widgetDidDissapear;
+
+-(void)refreshTimerDidFire;
 
 @end
