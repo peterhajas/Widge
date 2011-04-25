@@ -14,7 +14,7 @@
     return 2;
 }
 
--(int)iconColumnsWide
+-(int)iconColumnsTall
 {
     return 2;
 }
