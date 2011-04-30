@@ -1,5 +1,5 @@
 #import <UIKit/UIKit.h>
-#import <WidgeKit/WGWidgetViewController.h>
+#import <WidgeKit/WidgeKit.h>
 
 @interface DemoWidgetListController : WGWidgetViewController 
 {
