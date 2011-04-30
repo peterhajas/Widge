@@ -18,9 +18,38 @@
     return 2;
 }
 
--(int)iconColumnsWide
+-(int)iconColumnsTall
 {
     return 2;
+}
+
+//Widget lifecycle
+
+-(void)widgetWillAppear
+{
+	// We don't need any special behavior for this demo widget here.
+}
+
+-(void)widgetDidAppear
+{
+	// We don't need any special behavior for this demo widget here.
+}
+
+-(void)widgetWillDissapear
+{
+	// We don't need any special behavior for this demo widget here.
+}
+
+-(void)widgetDidDissapear
+{
+	// We don't need any special behavior for this demo widget here.
+}
+
+//Widget convenience methods
+
+-(void)refreshTimerDidFire
+{
+	// We don't need any special behavior for this demo widget here.
 }
 
 @end
