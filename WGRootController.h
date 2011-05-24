@@ -17,16 +17,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import <UIKit/UIKit.h>
 #import <WidgeKit/WGWidgetViewController.h>
-//#import "WGWidgetController.h"
+
+#define kDeviceWidgetWidth 4
+#define kDeviceWidgetHeight 4
+#define kIconPixelDimensions 80
 
 @interface WGRootController : NSObject
 {
 	NSMutableArray* widgetViewControllers;
-
+    NSMutableArray* widgetObjects;
 	UIView* widgetView;
 }
 
 -(void)loadWidgetBundles;
+-(void)layOutWidgets;
+-(UIView*)viewForLaidOutWidgets;
 -(WGWidgetViewController *)initDemoWidget;
 
 @end

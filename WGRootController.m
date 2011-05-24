@@ -21,6 +21,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 @implementation WGRootController
 
+-(id)init
+{
+    self = [super init];
+    if(self)
+    {
+        widgetViewControllers = [[NSMutableArray alloc] init];
+        widgetObjects = [[NSMutableArray alloc] init];
+        CGRect screenBounds = [[UIScreen mainScreen] bounds];
+        widgetView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, bounds.width, bounds.height)];
+    }
+    
+    return self;
+}
+
 -(void)loadWidgetBundles
 {
 	//Load all paths for the widget bundles
@@ -30,14 +44,45 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     
     NSMutableArray *paths = [[[NSMutableArray alloc] init] autorelease];
     
-    widgetViewControllers = [[NSMutableArray alloc] init];
-    
     for(NSString *bundleName in bundleNames)
     {
         NSString *bundlePath = [WIDGET_PATH stringByAppendingPathComponent:bundleName];
         [paths addObject:bundlePath];
         NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
         [widgetViewControllers addObject:[bundle principalClass]];
+    }
+}
+
+-(void)layOutWidgets
+{
+    // Iterate through the widgets, laying them out in our view
+    
+    int xCrosshair = 0;
+    int yCrosshair = 0;
+    
+    for(WGWidgetViewController* widgetViewController in widgetViewControllers)
+    {
+        // Allocate the widget
+        WGWidgetViewController* widget = [[widgetViewController alloc] init];
+        
+        [widgetObjects addObject:widget];
+        
+        
+        // If there's enough room for the widget to the right of our crosshair, put it there
+        if((kDeviceWidgetWidth - xCrosshair) <= [widget iconColumnsWide])
+        {
+            widget.view.origin = CGPointMake(xCrosshair * kIconPixelDimensions, yCrosshair * kIconPixelDimensions);
+            xCrosshair += [widget iconColumnsWide];
+        }
+        //If there's not enough room, let's put it below
+        else
+        {
+            xCrosshair = 0;
+            yCrosshair += 1; // This is not good
+            widget.view.origin = CGPointMake(xCrosshair * kIconPixelDimensions, yCrosshair * kIconPixelDimensions);
+            
+        }
+        [widgetView addSubview: widget.view];
     }
 }
 
