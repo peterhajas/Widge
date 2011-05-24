@@ -28,9 +28,9 @@ controlled.
 /** The name of the widget. */
 -(NSString*)widgetName;
 /** How many icons (SpringBoard icons) wide the widget is. */
--(int)iconRowsWide;
+-(int)iconColumnsWide;
 /** How many icons (SpringBoard icons) tall the widget is. */
--(int)iconColumnsTall;
+-(int)iconRowsTall;
 /** Your widget will have this method called when it is about to appear. */
 -(void)widgetWillAppear;
 /** Your widget will have this method called when it has appeared. */

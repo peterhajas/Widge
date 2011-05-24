@@ -17,12 +17,12 @@ Please see the included License file in the framework directory.
     return @"An awesome Widge Widget!";
 }
 
--(int)iconRowsWide
+-(int)iconColumnsWide;
 {
     return 2;
 }
 
--(int)iconColumnsTall
+-(int)iconRowsTall;
 {
     return 2;
 }
